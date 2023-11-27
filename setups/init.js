@@ -1,22 +1,19 @@
 const Database = require('./db')
 
 module.exports = function initializeApp(app) {
-    Database.getDB().catch((error) => {
+    Database.getDB().then(() => {
+
+
+        Database.getDB().then(() => {
+
+        }).catch((error) => {
+            throw error;
+        })
+
+    }).catch((error) => {
         throw error;
     })
 
-    Database.getDB().catch((error) => {
-        throw error;
-    })
-    Database.getDB().catch((error) => {
-        throw error;
-    })
-    Database.getDB().catch((error) => {
-        throw error;
-    })
-    Database.getDB().catch((error) => {
-        throw error;
-    })
 
     const PORT = process.env.APP_PORT;
     app.listen(PORT, () => {

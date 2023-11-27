@@ -3,3 +3,7 @@
 
 # env files
 .env
+
+# editors
+/.idea
+/.vscode
