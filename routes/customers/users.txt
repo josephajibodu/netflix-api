@@ -1,0 +1,6 @@
+// CUSTOMERS
+// get all movies
+// get specific movie
+// get actors info
+// get all genres
+// get all movies in a genre
