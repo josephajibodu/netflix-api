@@ -1,12 +1,11 @@
+const dotenv = require('dotenv')
+dotenv.config()
+
 const express = require('express');
 const app = express();
-const dotenv = require('dotenv')
-const registerRoutes = require('./setups/routes')
-const registerMiddlewares = require('./setups/middlewares')
-const initializeApp = require('./setups/init')
-
-// this will load the variables in .env file into node process.env
-dotenv.config()
+const registerRoutes = require('./src/setups/routes')
+const registerMiddlewares = require('./src/setups/middlewares')
+const initializeApp = require('./src/setups/init')
 
 initializeApp(app)
 
