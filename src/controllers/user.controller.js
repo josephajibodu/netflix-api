@@ -19,7 +19,9 @@ class UserController {
         const user = await db.collection('users').findOne({ _id: new ObjectId(req.params.id)});
 
         if (! user) {
-            return res.status(404).send('User not found')
+            return res.status(404).send({
+                message: 'User not found'
+            })
         }
 
         res.send(user)
@@ -38,7 +40,7 @@ class UserController {
 
         const newUser = await db.collection('users').insertOne(data);
 
-        res.status(201).send({_id: newUser.insertedId, ...data })
+        res.status(201).json({_id: newUser.insertedId, ...data })
     }
 
     static async update(req, res) {
@@ -58,7 +60,7 @@ class UserController {
 
         const updatedData = await db.collection('users').replaceOne({ _id: new ObjectId(req.params.id) }, data)
 
-        res.send({_id: req.params.id, ...data })
+        res.json({_id: req.params.id, ...data })
     }
 
     static async delete(req, res) {
@@ -78,7 +80,7 @@ class UserController {
 
         await db.collection('users').deleteOne({ _id: new ObjectId(req.params.id) })
 
-        res.status(204).send('User deleted')
+        res.status(204).json('User deleted')
     }
 }
 

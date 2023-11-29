@@ -1,29 +1,14 @@
+
 const express = require('express');
 const router = express.Router();
+const GenreController = require('../../controllers/genre.controller')
 
+router.get('/', GenreController.index);
 
-// Genre Schema
-// - name
-// - description
+router.post('/', GenreController.create);
 
-router.get('/', function (req, res) {
-    res.send('all')
-});
+router.put('/:id', GenreController.update);
 
-router.get('/:name', function (req, res) {
-    res.send('single')
-});
-
-router.post('/', function (req, res) {
-    res.send('create')
-});
-
-router.put('/:name', function (req, res) {
-    res.send('update')
-});
-
-router.delete('/:name', function (req, res) {
-    res.send('delete')
-});
+router.delete('/:id', GenreController.delete);
 
 module.exports = router;

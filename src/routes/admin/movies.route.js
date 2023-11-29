@@ -1,6 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-
+const { ObjectId } = require("mongodb");
+const Database = require("../../database/db");
+const MovieController = require("../../controllers/movie.controller");
 
 // Movie Schema
 // - title
@@ -11,25 +13,14 @@ const router = express.Router();
 // - casts (list of users)
 // - director (a user)
 
+router.get("/", MovieController.index);
 
-router.get('/', function (req, res) {
-    res.send('all')
-});
+router.get("/:id", MovieController.show);
 
-router.get('/:title', function (req, res) {
-    res.send('single')
-});
+router.post("/", MovieController.create);
 
-router.post('/', function (req, res) {
-    res.send('create')
-});
+router.put("/:id", MovieController.update);
 
-router.put('/:title', function (req, res) {
-    res.send('update')
-});
-
-router.delete('/:title', function (req, res) {
-    res.send('delete')
-});
+router.delete("/:id", MovieController.delete);
 
 module.exports = router;

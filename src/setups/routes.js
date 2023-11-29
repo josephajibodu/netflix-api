@@ -1,11 +1,9 @@
 // routes
-const usersRoute = require("../routes/admin/users.route");
-const genresRoute = require("../routes/admin/genres.route");
-const moviesRoute = require("../routes/admin/movies.route");
+const baseRoute = require("../routes");
+const v1Route = require("../routes/v1");
 
 module.exports = function registerRoutes(app) {
-    app.use('/users', usersRoute)
-    app.use('/genres', genresRoute)
-    app.use('/movies', moviesRoute)
+    app.use('/', baseRoute)
+    // app.use('/v1', v1Route)
 }
 

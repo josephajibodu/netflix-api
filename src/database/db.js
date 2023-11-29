@@ -1,5 +1,5 @@
 const { MongoClient } = require("mongodb");
-const appConfig = require('../configs/app.config')
+const configs = require('../configs')
 
 class Database {
     constructor() {
@@ -7,8 +7,7 @@ class Database {
             return Database.instance;
         }
 
-        this.url = appConfig.database_url;
-        console.log('url: ', this.url)
+        this.url = configs.database_url;
         this.client = null;
         this.db = null;
         Database.instance = this;
@@ -17,7 +16,7 @@ class Database {
     async connect() {
         if (!this.client) {
             this.client = await MongoClient.connect(this.url);
-            this.db = this.client.db(appConfig.database_name);
+            this.db = this.client.db(configs.database_name);
         }
         return this.db;
     }
