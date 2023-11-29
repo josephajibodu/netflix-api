@@ -5,35 +5,29 @@ const Movie = require('../models/Movie')
 class MovieController {
 
     static async index(req, res) {
-        const db = await Database.getDB();
-        const movies = await db.collection("movies").find({}).toArray();
+        const movies = await Movie.find({});
 
         res.json({ status: true, data: movies });
     }
 
     static async show(req, res) {
-        const db = await Database.getDB();
-        const movie = await db.collection("movies").findOne({
-            _id: new ObjectId(req.params.id),
-        });
+        const movie = await Movie.findById(req.params.id);
 
         if (!movie) {
-            return res.status(404).send("Movie not found");
+            return res.status(404).json({
+                message: "Movie not found"
+            });
         }
 
         res.json({ status: true, data: movie });
     }
 
     static async create(req, res) {
-
-        const movie = await Movie.findById(req.params.id)
-
-        if (movie) {
-            return res.status(400).send({ message: "Movie already exists" });
-        }
         const data = req.body;
-        const newMovie = await Movie.create(data);
+        // const newMovie = await Movie.create(data);
 
+        const newMovie = new Movie(data);
+        await newMovie.save();
         // connect the movie with the casts, genres and director
 
         res.status(201).json(newMovie)

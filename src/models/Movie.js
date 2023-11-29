@@ -1,22 +1,32 @@
-const Database = require("../database/db");
-const {ObjectId} = require("mongodb");
+const mongoose = require("mongoose");
 
-class Movie {
-    static async findById(id) {
-        const db = await Database.getDB();
+const movieSchema = mongoose.Schema({
+    title: {
+        type: String,
+        minLength: 5,
+        required: true
+    },
+    description: String,
+    release_year: String,
+    // TODO: genre should be array of objectID mongoose.Schema.Types.ObjectId
+    genres: Array,
+    duration: Number,
+    casts: Array,
+    director: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: false
+    },
 
-        return await db.collection("movies").findOne({
-            _id: new ObjectId(id),
-        });
+    updated_at: {
+        type: Date,
+        default: Date.now()
+    },
+    created_at: {
+        type: Date,
+        default: Date.now()
     }
+})
 
-    static async create(data) {
-        const db = await Database.getDB();
-
-        const newInsertion = await db.collection("movies").insertOne(data);
-
-        return await this.findById(newInsertion.insertedId);
-    }
-}
+const Movie = mongoose.model('Movie', movieSchema)
 
 module.exports = Movie
