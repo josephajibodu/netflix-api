@@ -1,4 +1,4 @@
-const Database = require("../database/db");
+const Database = require("../../database/db");
 const {ObjectId} = require("mongodb");
 
 class GenreController {

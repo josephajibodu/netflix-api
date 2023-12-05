@@ -1,7 +1,7 @@
 
 const express = require('express');
 const router = express.Router();
-const GenreController = require('../../controllers/genre.controller')
+const GenreController = require('../../controllers/admin/genre.controller')
 
 router.get('/', GenreController.index);
 

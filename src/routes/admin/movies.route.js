@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { ObjectId } = require("mongodb");
 const Database = require("../../database/db");
-const MovieController = require("../../controllers/movie.controller");
+const MovieController = require("../../controllers/admin/movie.controller");
 
 // Movie Schema
 // - title

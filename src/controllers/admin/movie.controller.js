@@ -1,6 +1,6 @@
-const Database = require("../database/db");
+const Database = require("../../database/db");
 const {ObjectId} = require("mongodb");
-const Movie = require('../models/Movie')
+const Movie = require('../../models/Movie')
 
 class MovieController {
 
