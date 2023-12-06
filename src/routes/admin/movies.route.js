@@ -13,7 +13,7 @@ const MovieController = require("../../controllers/admin/movie.controller");
 // - casts (list of users)
 // - director (a user)
 
-router.get("/", MovieController.index);
+router.get("/",  MovieController.index);
 
 router.get("/:id", MovieController.show);
 
