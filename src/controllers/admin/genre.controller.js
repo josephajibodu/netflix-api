@@ -1,68 +1,59 @@
-const Database = require("../../database/db");
-const {ObjectId} = require("mongodb");
+const Genre = require("../../models/Genre");
 
 class GenreController {
     static async index(req, res) {
-        const db = await Database.getDB();
-        const genres = await db.collection('genres').find({}).toArray();
+        const genres = await Genre.find();
+        if (!genres) {
+            return res
+                .status(404)
+                .json({ status: false, message: "genres not found" });
+        }
 
-        res.json(genres)
+        res.json({ status: true, data: genres });
+    }
+
+    static async show(req, res) {
+        const genre = await Genre.findById({ _id: req.params.id });
+        if (!genre) {
+            return res.status(404).send({
+                message: "Genre not found",
+            });
+        }
+        res.json({ status: true, data: genre });
     }
 
     static async create(req, res) {
-        const db = await Database.getDB();
-
         const data = req.body;
 
-        const genre = await db.collection('genres').findOne({ name: data.name });
-
+        const genre = await Genre.findById({ id: req.param.id });
         if (genre) {
-            return res.status(400).send('Genre already exists')
+            return res.status(400).send("Genre already exist");
         }
+        const newGenre = new Genre(data);
+        await newGenre.save();
 
-        const newGenre = await db.collection('genres').insertOne(data);
-
-        res.status(201).json({_id: newGenre.insertedId, ...data })
+        res.status(201).json({ _id: newGenre.insertedId, ...data });
     }
 
     static async update(req, res) {
-        const db = await Database.getDB();
-
+        const genre = await Genre.findById(req.params.id);
+        if (!genre) {
+            return res.status(404).send("Genre not found");
+        }
         const data = req.body;
+        Object.assign(genre, data);
+        await genre.save();
 
-        if (! ObjectId.isValid(req.params.id)) {
-            return res.status(400).send('Invalid Genre Id')
-        }
-
-        const genre = await db.collection('genres').findOne({ _id: new ObjectId(req.params.id) });
-
-        if (! genre) {
-            return res.status(404).send('Genre not found')
-        }
-
-        const updatedData = await db.collection('genres').replaceOne({ _id: new ObjectId(req.params.id) }, data)
-
-        res.json({_id: req.params.id, ...data })
+        res.status(201).json({ status: true, data: genre });
     }
 
     static async delete(req, res) {
-        const db = await Database.getDB();
-
-        const data = req.body;
-
-        if (! ObjectId.isValid(req.params.id)) {
-            return res.status(400).send('Invalid Genre Id')
+        const genre = await Genre.findById({ _id: req.params.id });
+        if (!genre) {
+            return res.status(404).send("Genre not found");
         }
-
-        const genre = await db.collection('genres').findOne({ _id: new ObjectId(req.params.id) });
-
-        if (! genre) {
-            return res.status(404).send('Genre not found')
-        }
-
-        await db.collection('genres').deleteOne({ _id: new ObjectId(req.params.id) })
-
-        res.status(204).json('Genre deleted')
+        await Genre.deleteOne({ _id: req.params.id });
+        res.status(204).json({ status: true, message: "Genre deleted" });
     }
 }
 

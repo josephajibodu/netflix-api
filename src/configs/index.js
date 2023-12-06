@@ -9,6 +9,8 @@ const configs = {
     database_url: process.env.DATABASE_URL,
     database_name: process.env.DATABASE_NAME,
 
+    jwt_key: process.env.JWT_SECRET,
+
     ...paystackConfig,
 
     ...flutterwaveConfig,

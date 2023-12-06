@@ -1,5 +1,8 @@
 const Admin = require("../../models/User");
 const jwt = require('jsonwebtoken');
+const {StatusCodes} = require("http-status-codes");
+const configs = require('../../configs');
+const bcrypt = require('bcrypt');
 
 
 // SESSION
@@ -22,24 +25,31 @@ const jwt = require('jsonwebtoken');
 
 class AuthController {
     static async login(req, res) {
-        // const users = await User.find({});
-        // if (!users) {
-        //     return res
-        //         .status(404)
-        //         .json({ status: false, message: "Users not found" });
-        // }
-        const user = await Admin.findOne();
+
+        const { email, password } = req.body;
+
+        const admin = await Admin.findOne({ email: email });
+        if (! admin) {
+            return res.status(StatusCodes.UNAUTHORIZED).json({ status: false, message: "There is user with such credentials." });
+        }
+
+        // verify if the password is equal
+        const isAMatch = await bcrypt.compare(password, admin.password);
+        if (! isAMatch) {
+            return res.status(StatusCodes.UNAUTHORIZED).json({ status: false, message: "Password is incorrect." });
+        }
 
         const token = jwt.sign({
-            _id: user._id,
-            email: user.email,
-            full_name: user.full_name,
-        }, 'secret-password-for-encryption');
+            _id: admin._id,
+            email: admin.email,
+            full_name: admin.full_name,
+        }, configs.jwt_key, { expiresIn: '1d'});
 
-        res.json({ status: true, token: token });
+        res.json({ status: true, token: token, refreshToken: token });
     }
 
     static async logout(req, res) {
+
         // const user = await User.findById({ _id: req.params.id });
         // if (!user) {
         //     return res.status(404).send({
@@ -47,19 +57,44 @@ class AuthController {
         //     });
         // }
 
-        res.json({ status: true, data: 'logged out' });
+        // we extract the bearer token
+        // if it doesn't exist we return 401
+        const authorization = req.headers.authorization;
+        if (! authorization) {
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                status: false, message: "Unauthenticated"
+            })
+        }
+
+        const token = authorization.split(" ")[1];
+
+        // we verify the token
+        try {
+            const payload = jwt.verify(authorization, configs.jwt_key);
+        } catch (e) {
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                status: false, message: "Invalid authorization token"
+            })
+        }
+
+        res.json({ status: true, data: 'User logged out' });
     }
 
     static async register(req, res) {
-        // const data = req.body;
-        // data.role = 'movie-actor';
-        //
-        // const user = await User.findOne({ email: data.email });
-        // if (user) {
-        //     return res.status(400).send("User with the same email already exist");
-        // }
-        // const newUser = new User(data);
-        // await newUser.save();
+        const data = req.body;
+
+        const admin = await Admin.findOne({ email: data.email });
+        if (admin) {
+            return res.status(400).send("Admin/User with the same email already exist");
+        }
+
+        const passwordHash = await bcrypt.hash(data.password, 10);
+
+        const newUser = new Admin(data);
+        newUser.role = 'admin';
+        newUser.password = passwordHash
+
+        await newUser.save();
 
         res.status(201).json({ status: true, data: 'registered' });
     }

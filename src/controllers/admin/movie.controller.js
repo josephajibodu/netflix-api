@@ -1,11 +1,13 @@
-const Database = require("../../database/db");
-const {ObjectId} = require("mongodb");
-const Movie = require('../../models/Movie')
+const Movie = require("../../models/Movie");
 
 class MovieController {
-
     static async index(req, res) {
         const movies = await Movie.find({});
+        if (!movies) {
+            return res
+                .status(404)
+                .json({ status: false, message: "Movies not found" });
+        }
 
         res.json({ status: true, data: movies });
     }
@@ -15,7 +17,7 @@ class MovieController {
 
         if (!movie) {
             return res.status(404).json({
-                message: "Movie not found"
+                message: "Movie not found",
             });
         }
 
@@ -30,13 +32,12 @@ class MovieController {
         await newMovie.save();
         // connect the movie with the casts, genres and director
 
-        res.status(201).json(newMovie)
+        res.status(201).json(newMovie);
     }
 
     static async update(req, res) {
-        const db = await Database.getDB();
-        const movie = (await db.collection("movies")).findOne({
-            _id: new ObjectId(req.params.id),
+        const movie = await Movie.findById({
+            _id: req.params.id,
         });
 
         if (!movie) {
@@ -44,24 +45,22 @@ class MovieController {
         }
 
         const data = req.body;
-        db.collection("movies").replaceOne({ title: req.params.title }, data);
+        Object.assign(movie, data);
+        await movie.save();
 
-        res.status(201).json({...movie, ...data})
+        res.status(200).json({ status: true, movie });
     }
 
     static async delete(req, res) {
-        const db = await Database.getDB();
-        const movie = await db.collection("movies").findOne({
-            _id: new ObjectId(req.params.id),
-        });
-
+        const movie = await Movie.findById({ _id: req.params.id });
         if (!movie) {
             return res.status(400).send("Movie not found");
         }
 
-        await db.collection("movies").deleteOne({ title: req.params.title });
-        res.status(204).json({
-            message: "Movie deleted"
+        await Movie.deleteOne({ _id: req.params.id });
+        res.status(200).json({
+            status: false,
+            message: "Movie deleted",
         });
     }
 }

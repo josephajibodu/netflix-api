@@ -14,6 +14,10 @@ const userSchema = mongoose.Schema({
         required: false,
         enum: ['admin', 'movie-actor', 'customer']
     },
+    password: {
+        type: String,
+        minLength: 8
+    }
 });
 
 const User = mongoose.model("User", userSchema);
