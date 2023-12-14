@@ -17,11 +17,17 @@ class AuthService {
             throw new Error("Password is incorrect.");
         }
 
-        return jwt.sign({
+        const token = jwt.sign({
             _id: admin._id,
             email: admin.email,
             full_name: admin.full_name,
-        }, configs.jwt_key, { expiresIn: '1d'});
+        }, configs.jwt_key, { expiresIn: '24h'});
+
+        // update the token in the db
+        admin.token = token;
+        admin.save();
+
+        return token;
     }
 
     static async register(data) {
@@ -41,8 +47,24 @@ class AuthService {
         return newUser;
     }
 
-    static logout() {
+    static async logout(user_id) {
+        const admin = await Admin.findOne({ _id: user_id });
+        if (!admin) {
+            throw new Error("Invalid authentication token.");
+        }
+        admin.token = null;
+        admin.save();
+    }
 
+    static async validateToken(user_id, token) {
+        const admin = await Admin.findOne({ _id: user_id });
+        if (!admin) {
+          throw new Error("Invalid authentication token.");
+        }
+
+        if (admin.token != token) {
+            throw new Error("Invalid authentication token.");
+        }
     }
 }
 

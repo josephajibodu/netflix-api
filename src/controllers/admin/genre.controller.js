@@ -1,60 +1,53 @@
-const Genre = require("../../models/Genre");
+const GenreService = require("../../services/admin/genre.service");
+const Genre = require("../../services/admin/genre.service");
 
 class GenreController {
-    static async index(req, res) {
-        const genres = await Genre.find();
-        if (!genres) {
-            return res
-                .status(404)
-                .json({ status: false, message: "genres not found" });
-        }
-
-        res.json({ status: true, data: genres });
+  static async index(req, res) {
+    try {
+      const genres = await Genre.index();
+      res.json({ status: true, data: genres });
+    } catch (error) {
+      res.status(404).json({ status: false, message: error.message });
     }
+  }
 
-    static async show(req, res) {
-        const genre = await Genre.findById({ _id: req.params.id });
-        if (!genre) {
-            return res.status(404).send({
-                message: "Genre not found",
-            });
-        }
-        res.json({ status: true, data: genre });
+  static async show(req, res) {
+    const name = req.params.name;
+    try {
+      const genre = await GenreService.show(name);
+      res.json({ status: true, data: genre });
+    } catch (error) {
+      res.status(404).json({ status: false, message: error });
     }
+  }
 
-    static async create(req, res) {
-        const data = req.body;
-
-        const genre = await Genre.findById({ id: req.param.id });
-        if (genre) {
-            return res.status(400).send("Genre already exist");
-        }
-        const newGenre = new Genre(data);
-        await newGenre.save();
-
-        res.status(201).json({ _id: newGenre.insertedId, ...data });
+  static async create(req, res) {
+    const data = req.body;
+    const name = req.params.name;
+    try {
+      const genre = await Genre.create({ name, data });
+      res.status(201).json({ _id: genre });
+    } catch (error) {
+      res.status(401).json({ status: false, message: error });
     }
+  }
 
-    static async update(req, res) {
-        const genre = await Genre.findById(req.params.id);
-        if (!genre) {
-            return res.status(404).send("Genre not found");
-        }
-        const data = req.body;
-        Object.assign(genre, data);
-        await genre.save();
-
-        res.status(201).json({ status: true, data: genre });
+  static async update(req, res) {
+    const name = req.params.name;
+    const data = req.body;
+    try {
+      const genre = await Genre.update({ name, data });
+      res.status(200).json({ status: true, data: genre });
+    } catch (error) {
+      res.status(401).json({ status: false, message: error });
     }
+  }
 
-    static async delete(req, res) {
-        const genre = await Genre.findById({ _id: req.params.id });
-        if (!genre) {
-            return res.status(404).send("Genre not found");
-        }
-        await Genre.deleteOne({ _id: req.params.id });
-        res.status(204).json({ status: true, message: "Genre deleted" });
-    }
+  static async delete(req, res) {
+    const genre = await Genre.delete(req.params.name);
+
+    res.status(204).json({ status: true, message: "Genre deleted" });
+  }
 }
 
 module.exports = GenreController;

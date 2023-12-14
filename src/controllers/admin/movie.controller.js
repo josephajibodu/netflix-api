@@ -1,67 +1,42 @@
-const Movie = require("../../models/Movie");
+const MovieService = require("../../services/admin/movie.service");
+const { StatusCodes } = require("http-status-codes");
 
 class MovieController {
-    static async index(req, res) {
-        const movies = await Movie.find({});
-        if (!movies) {
-            return res
-                .status(404)
-                .json({ status: false, message: "Movies not found" });
-        }
+  static async index(req, res) {
+    const movies = await MovieService.index();
 
-        res.json({ status: true, data: movies });
-    }
+    res.json({ status: true, data: movies });
+  }
 
-    static async show(req, res) {
-        const movie = await Movie.findById(req.params.id);
+  static async show(req, res) {
+    const id = req.params.id;
+    const movie = await MovieService.show(id);
+    res.json({ status: true, data: movie });
+  }
 
-        if (!movie) {
-            return res.status(404).json({
-                message: "Movie not found",
-            });
-        }
+  static async create(req, res) {
+    const data = req.body;
+    // const newMovie = await Movie.create(data);
 
-        res.json({ status: true, data: movie });
-    }
+    const newMovie = await MovieService.create(data);
+    // connect the movie with the casts, genres and director
 
-    static async create(req, res) {
-        const data = req.body;
-        // const newMovie = await Movie.create(data);
+    res.status(StatusCodes.CREATED).json(newMovie);
+  }
 
-        const newMovie = new Movie(data);
-        await newMovie.save();
-        // connect the movie with the casts, genres and director
+  static async update(req, res) {
+    const id = req.params.id;
+    const data = req.body;
+    const movie = await MovieService.update({ id, data });
+    res.status(StatusCodes.ACCEPTED).json({ status: true, movie });
+  }
 
-        res.status(201).json(newMovie);
-    }
-
-    static async update(req, res) {
-        const movie = await Movie.findById({
-            _id: req.params.id,
-        });
-
-        if (!movie) {
-            return res.status(404).send("Movie not found");
-        }
-
-        const data = req.body;
-        Object.assign(movie, data);
-        await movie.save();
-
-        res.status(200).json({ status: true, movie });
-    }
-
-    static async delete(req, res) {
-        const movie = await Movie.findById({ _id: req.params.id });
-        if (!movie) {
-            return res.status(400).send("Movie not found");
-        }
-
-        await Movie.deleteOne({ _id: req.params.id });
-        res.status(200).json({
-            status: false,
-            message: "Movie deleted",
-        });
-    }
+  static async delete(req, res) {
+    await MovieService.delete(req.params.id);
+    res.status(StatusCodes.OK).json({
+      status: true,
+      message: "Movie deleted",
+    });
+  }
 }
 module.exports = MovieController;

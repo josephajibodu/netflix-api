@@ -34,7 +34,8 @@ class AuthController {
     }
 
     static async logout(req, res) {
-        await AdminAuthService.logout();
+        const user = req.user;
+        await AdminAuthService.logout(user._id);
 
         res.json({ status: true, data: 'User logged out' });
     }
