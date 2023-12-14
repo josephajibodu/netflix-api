@@ -10,7 +10,10 @@ class MovieService {
   }
 
   static async show(id) {
-    const movie = await Movie.findById({ _id: id });
+    const movie = await Movie.findById({ _id: id })
+      .populate("director")
+      .populate("casts");
+      
     if (!movie) {
       throw new Error("Movie not found");
     }
