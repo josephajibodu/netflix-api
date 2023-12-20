@@ -1,9 +1,9 @@
-const Admin = require("../../models/User");
+const Admin = require("../models/User");
 const jwt = require('jsonwebtoken');
 const {StatusCodes} = require("http-status-codes");
-const configs = require('../../configs');
+const configs = require('../configs');
 const bcrypt = require('bcrypt');
-const AdminAuthService = require('../../services/admin/auth.service')
+const AdminAuthService = require('../services/auth.service')
 
 
 // SESSION

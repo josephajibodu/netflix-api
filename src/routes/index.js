@@ -1,4 +1,4 @@
-const authRoute = require("./admin/auth.route");
+const authRoute = require("./auth.route");
 const actorsRoute = require("./admin/actors.route");
 const genresRoute = require("./admin/genres.route");
 const moviesRoute = require("./admin/movies.route");

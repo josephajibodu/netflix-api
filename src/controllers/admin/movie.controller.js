@@ -21,7 +21,7 @@ class MovieController {
     const newMovie = await MovieService.create(data);
     // connect the movie with the casts, genres and director
 
-    res.status(StatusCodes.CREATED).json(newMovie);
+    res.status(StatusCodes.CREATED).json({ status: true, data: newMovie });
   }
 
   static async update(req, res) {

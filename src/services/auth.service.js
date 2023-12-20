@@ -1,12 +1,12 @@
-const Admin = require("../../models/User");
+const User = require("../models/User");
 const {StatusCodes} = require("http-status-codes");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const configs = require("../../configs");
+const configs = require("../configs");
 
 class AuthService {
     static async login(data) {
-        const admin = await Admin.findOne({ email: data.email });
+        const admin = await User.findOne({ email: data.email });
         if (! admin) {
             throw new Error("There is user with such credentials.");
         }
@@ -31,14 +31,14 @@ class AuthService {
     }
 
     static async register(data) {
-        const admin = await Admin.findOne({ email: data.email });
+        const admin = await User.findOne({ email: data.email });
         if (admin) {
-            throw new Error("Admin/User with the same email already exist");
+            throw new Error("User with the same email already exist");
         }
 
         const passwordHash = await bcrypt.hash(data.password, 10);
 
-        const newUser = new Admin(data);
+        const newUser = new User(data);
         newUser.role = 'admin';
         newUser.password = passwordHash
 
@@ -48,7 +48,7 @@ class AuthService {
     }
 
     static async logout(user_id) {
-        const admin = await Admin.findOne({ _id: user_id });
+        const admin = await User.findOne({ _id: user_id });
         if (!admin) {
             throw new Error("Invalid authentication token.");
         }
@@ -57,7 +57,7 @@ class AuthService {
     }
 
     static async validateToken(user_id, token) {
-        const admin = await Admin.findOne({ _id: user_id });
+        const admin = await User.findOne({ _id: user_id });
         if (!admin) {
           throw new Error("Invalid authentication token.");
         }

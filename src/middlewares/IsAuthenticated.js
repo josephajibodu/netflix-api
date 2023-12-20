@@ -1,7 +1,7 @@
 const {StatusCodes} = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const configs = require("../configs");
-const AuthService = require("../services/admin/auth.service");
+const AuthService = require("../services/auth.service");
 
 module.exports = async function (req, res, next) {
     // we extract the bearer token
