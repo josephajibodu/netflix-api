@@ -25,8 +25,9 @@ module.exports = async function (req, res, next) {
     } catch (e) {
         console.log(e.message)
         return res.status(StatusCodes.UNAUTHORIZED).json({
-            status: false, message: "Invalid authorization token"
-        })
+          status: false,
+          message: "Not authenticated",
+        });
     }
 
     next();
