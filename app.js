@@ -16,3 +16,9 @@ registerRoutes(app)
 
 
 // TODO: error handler
+function errorHandler(err, req, res, next) {
+  // check the kind of error 401, 404, 400, 500
+  res.status(StatusCodes.BAD_REQUEST).json({ status: false, error: e.message });
+}
+
+app.use(errorHandler)

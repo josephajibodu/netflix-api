@@ -3,7 +3,6 @@ const router = express.Router();
 const MovieController = require("../../controllers/admin/movie.controller");
 const validator = require("../../validators");
 
-
 router.get("/", MovieController.index);
 
 router.get("/:id", MovieController.show);
