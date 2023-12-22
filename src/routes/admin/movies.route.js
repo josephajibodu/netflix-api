@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 const MovieController = require("../../controllers/admin/movie.controller");
 const validator = require("../../validators");
+const asyncHandler = require("express-async-handler");
 
 router.get("/", MovieController.index);
 
-router.get("/:id", MovieController.show);
+router.get("/:id", asyncHandler(MovieController.show));
 
 router.post("/", validator.createMovieValidation(), validator.validate(), MovieController.create);
 

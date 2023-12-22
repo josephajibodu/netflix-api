@@ -13,13 +13,9 @@ class MovieController {
   }
 
   static async show(req, res, next) {
-    try {
-      const id = req.params.id;
-      const movie = await MovieService.show(id);
-      res.json({ status: true, data: movie });
-    } catch (e) {
-      next(e);
-    }
+    const id = req.params.id;
+    const movie = await MovieService.show(id);
+    res.json({ status: true, data: movie });
   }
 
   static async create(req, res, next) {
