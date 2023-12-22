@@ -1,10 +1,12 @@
+const { StatusCodes } = require("http-status-codes");
+const Exception = require("../../exceptions/Exception");
 const Movie = require("../../models/Movie");
 
 class MovieService {
   static async index() {
     const movies = await Movie.find({});
     if (!movies) {
-      throw new Error("Movies not found");
+      throw new Exception("Movies not found", StatusCodes.NOT_FOUND);
     }
     return movies;
   }
@@ -15,7 +17,7 @@ class MovieService {
       .populate("casts");
       
     if (!movie) {
-      throw new Error("Movie not found");
+      throw new Exception("Movie not found", StatusCodes.NOT_FOUND);
     }
     return movie;
   }
@@ -28,7 +30,7 @@ class MovieService {
   static async update({ id, data }) {
     const movie = await Movie.findById({ _id: id });
     if (!movie) {
-      throw new Error("Movie not found");
+      throw new Exception("Movie not found", StatusCodes.NOT_FOUND);
     }
     // use this when almost all columns/properties can change
     // Object.assign(movie, data);
@@ -49,7 +51,7 @@ class MovieService {
   static async delete(id) {
     const movie = await Movie.findById({ _id: id });
     if (!movie) {
-      throw new Error("Movie not found");
+      throw new Exception("Movie not found", StatusCodes.NOT_FOUND);
     }
     await Movie.deleteOne({ _id: id });
   }
