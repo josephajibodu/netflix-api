@@ -22,7 +22,7 @@ class MovieService {
   static async create(data) {
     const newMovie = new Movie(data);
     await newMovie.save();
-    return newMovie;
+    return newMovie.populate(['director', 'casts']);
   }
 
   static async update({ id, data }) {
@@ -30,9 +30,20 @@ class MovieService {
     if (!movie) {
       throw new Error("Movie not found");
     }
-    Object.assign(movie, data);
+    // use this when almost all columns/properties can change
+    // Object.assign(movie, data);
+    
+    // where there a lots of data to be updated but not all
+    // for (const key in data) {
+    //   movie[key] = data[key];
+    // }
+
+    movie.description = data.description
+    movie.genres = data.genres;
+    movie.casts = data.casts;
+  
     await movie.save();
-    return movie;
+    return movie.populate(["director", "casts"]);
   }
 
   static async delete(id) {

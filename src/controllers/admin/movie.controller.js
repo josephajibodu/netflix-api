@@ -1,3 +1,4 @@
+const { matchedData } = require("express-validator");
 const MovieService = require("../../services/admin/movie.service");
 const { StatusCodes } = require("http-status-codes");
 
@@ -26,7 +27,7 @@ class MovieController {
 
   static async update(req, res) {
     const id = req.params.id;
-    const data = req.body;
+    const data = matchedData(req)
     const movie = await MovieService.update({ id, data });
     res.status(StatusCodes.ACCEPTED).json({ status: true, movie });
   }

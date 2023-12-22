@@ -9,7 +9,7 @@ function createMovieValidation() {
       .withMessage("must be a string")
       .isLength({ min: 5, max: 100 })
       .withMessage("title should contain 5-100 characters"),
-    body("description").notEmpty().isLength({ min: 150 }),
+    body("description").notEmpty().isLength({ min: 20 }),
     body("release_year").notEmpty().isDate(),
     body("genres").isArray({ min: 1 }),
     body("duration").isNumeric(),
@@ -18,6 +18,15 @@ function createMovieValidation() {
   ];
 }
 
+function updateMovieValidation() {
+  return [
+    body("description").notEmpty().isLength({ min: 20 }),
+    body("genres").isArray({ min: 1 }),
+    body("casts").isArray(),
+  ];
+}
+
 module.exports = {
-    createMovieValidation
+  updateMovieValidation,
+  createMovieValidation
 }

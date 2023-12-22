@@ -10,7 +10,7 @@ router.get("/:id", MovieController.show);
 
 router.post("/", validator.createMovieValidation(), validator.validate(), MovieController.create);
 
-router.put("/:id", MovieController.update);
+router.put("/:id", validator.updateMovieValidation(), validator.validate(), MovieController.update);
 
 router.delete("/:id", MovieController.delete);
 

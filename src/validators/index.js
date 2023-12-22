@@ -1,4 +1,4 @@
-const { validationResult } = require("express-validator");
+const { validationResult, matchedData } = require("express-validator");
 const movieValidation = require("./movie.validations");
 const { StatusCodes } = require("http-status-codes");
 
@@ -26,5 +26,5 @@ function validate() {
 
 module.exports = {
     ...movieValidation,
-    validate
+    validate,
 }
