@@ -1,8 +1,8 @@
 const { StatusCodes } = require("http-status-codes");
 const Exception = require("../exceptions/Exception");
+const logger = require("../libs/logger");
 
 module.exports = function errorHandler(err, req, res, next) {
-    // log the error (winston)
     if (err instanceof Exception) {
         return res
             .status(err.code)

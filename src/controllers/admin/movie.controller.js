@@ -1,13 +1,16 @@
 const { matchedData } = require("express-validator");
 const MovieService = require("../../services/admin/movie.service");
 const { StatusCodes } = require("http-status-codes");
+const logger = require("../../libs/logger");
 
 class MovieController {
   static async index(req, res, next) {
     try {
        const movies = await MovieService.index();
+       logger.error(JSON.stringify({name: "dldldl"}))
        res.json({ status: true, data: movies });
     } catch (e) {
+      logger.error(e.message)
       next(e)
     }
   }

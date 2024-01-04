@@ -1,5 +1,5 @@
 const User = require("../../models/User");
-const Exception = require("../../exceptions");
+const Exception = require("../../exceptions/Exception");
 const { StatusCodes } = require("http-status-codes");
 
 class ActorService {

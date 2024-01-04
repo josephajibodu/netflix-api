@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const MovieController = require("../../controllers/admin/movie.controller");
-const validator = require("../../validators/movie.validation");
+const validator = require("../../validators/movie.validator");
 const asyncHandler = require("express-async-handler");
 
 router.get("/", MovieController.index);
