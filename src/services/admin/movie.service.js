@@ -15,16 +15,20 @@ class MovieService {
     const movie = await Movie.findById({ _id: id })
       .populate("director")
       .populate("casts");
-      
+
     if (!movie) {
       throw new Exception("Movie not found", StatusCodes.NOT_FOUND);
     }
     return movie;
   }
   static async create(data) {
+    const movie = await Movie.findOne({ title: data.title });
+    if (movie) {
+      throw new Exception("Movie already exists", StatusCodes.BAD_REQUEST);
+    }
     const newMovie = new Movie(data);
     await newMovie.save();
-    return newMovie.populate(['director', 'casts']);
+    return newMovie.populate(["director", "casts"]);
   }
 
   static async update({ id, data }) {
@@ -34,16 +38,16 @@ class MovieService {
     }
     // use this when almost all columns/properties can change
     // Object.assign(movie, data);
-    
+
     // where there a lots of data to be updated but not all
     // for (const key in data) {
     //   movie[key] = data[key];
     // }
 
-    movie.description = data.description
+    movie.description = data.description;
     movie.genres = data.genres;
     movie.casts = data.casts;
-  
+
     await movie.save();
     return movie.populate(["director", "casts"]);
   }

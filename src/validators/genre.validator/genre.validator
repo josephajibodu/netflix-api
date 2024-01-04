@@ -1,0 +1,30 @@
+const { body } = require("express-validator");
+
+function createGenreValidation() {
+  return [
+    body("name")
+      .notEmpty()
+      .withMessage("title is required")
+      .isString()
+      .withMessage("must be a string")
+      .isLength({ min: 7, max: 100 })
+      .withMessage("title should contain 5-100 characters"),
+  ];
+}
+
+function updateGenreValidation() {
+  return [
+    body("name")
+      .notEmpty()
+      .withMessage("title is required")
+      .isString()
+      .withMessage("must be a string")
+      .isLength({ min: 7, max: 100 })
+      .withMessage("title should contain 5-100 characters"),
+  ];
+}
+
+module.exports = {
+  updateGenreValidation,
+  createGenreValidation,
+};

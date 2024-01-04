@@ -9,4 +9,4 @@ class Exception extends Error {
   }
 }
 
-module.exports = Exception
+module.exports = Exception;

@@ -1,15 +1,24 @@
-
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const GenreController = require('../../controllers/admin/genre.controller')
-const IsAuthenticated = require("../../middlewares/IsAuthenticated");
+const GenreController = require("../../controllers/admin/genre.controller");
+const validator = require("../../validators/genre.validator");
 
-router.get('/', IsAuthenticated, GenreController.index);
+router.get("/", GenreController.index);
 
-router.post('/', IsAuthenticated, GenreController.create);
+router.post(
+  "/",
+  validator.createGenreValidation(),
+  validator.validate(),
+  GenreController.create
+);
 
-router.put('/:id', IsAuthenticated, GenreController.update);
+router.put(
+  "/:id",
+  validator.updateGenreValidation(),
+  validator.validate(),
+  GenreController.update
+);
 
-router.delete('/:id', IsAuthenticated, GenreController.delete);
+router.delete("/:id", GenreController.delete);
 
 module.exports = router;
