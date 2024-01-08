@@ -44,12 +44,16 @@ class AuthController {
         res.json({ status: true, data: 'User logged out' });
     }
 
-    static async register(req, res) {
-        const data = req.body;
+    static async register(req, res, next) {
+        try {
+            const data = req.body;
 
-        const user = await AdminAuthService.register(data);
+            const user = await AdminAuthService.register(data);
 
-        res.status(201).json({ status: true, data: user });
+            res.status(201).json({ status: true, data: user });
+        } catch (error) {
+            next(error)
+        }
     }
 }
 
