@@ -7,7 +7,7 @@ class MovieController {
   static async index(req, res, next) {
     try {
        const movies = await MovieService.index();
-       logger.error("this is an error simulated")
+       logger.error("backup initiated by joseph")
        res.json({ status: true, data: movies });
     } catch (e) {
       logger.error(e.message)
