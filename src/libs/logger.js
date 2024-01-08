@@ -1,4 +1,6 @@
 const winston = require("winston");
+const TelegramLogger = require("winston-telegram");
+const configs = require("../configs");
 
 const myFormat = winston.format.printf(({ level, message, timestamp }) => {
   return `[${timestamp}] ${level}: ${message}`;
@@ -18,7 +20,12 @@ const logger = winston.createLogger({
     new winston.transports.File({
         filename: 'logs/combined.log',
         level: 'info'
-    })
+    }),
+    // new TelegramLogger({
+    //   token: configs.telegram.token,
+    //   chatId: configs.telegram.chat_id,
+    //   level: 'error',
+    // })
   ],
 });
 

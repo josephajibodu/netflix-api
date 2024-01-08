@@ -1,5 +1,6 @@
 const paystackConfig = require("./paystack");
 const flutterwaveConfig = require("./flutterwave");
+const telegramConfig = require("./telegram");
 
 const configs = {
     app_name: process.env.APP_NAME,
@@ -14,6 +15,10 @@ const configs = {
     ...paystackConfig,
 
     ...flutterwaveConfig,
+
+    telegram: {
+        ...telegramConfig
+    }
 }
 
 module.exports = configs;

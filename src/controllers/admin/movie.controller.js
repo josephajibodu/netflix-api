@@ -7,7 +7,7 @@ class MovieController {
   static async index(req, res, next) {
     try {
        const movies = await MovieService.index();
-       logger.error(JSON.stringify({name: "dldldl"}))
+       logger.error("this is an error simulated")
        res.json({ status: true, data: movies });
     } catch (e) {
       logger.error(e.message)
