@@ -25,12 +25,16 @@ const AdminAuthService = require('../services/auth.service')
 // server just verifies the token
 
 class AuthController {
-    static async login(req, res) {
-        const { email, password } = req.body;
+    static async login(req, res, next) {
+        try {
+            const { email, password } = req.body;
 
-        const token = await AdminAuthService.login({ email, password })
+            const token = await AdminAuthService.login({ email, password });
 
-        res.json({ status: true, token: token });
+            res.json({ status: true, token: token });
+        } catch (error) {
+            next(error)
+        }
     }
 
     static async logout(req, res) {

@@ -5,6 +5,9 @@ const registerRoutes = require("./src/setups/routes");
 const registerMiddlewares = require("./src/setups/middlewares");
 const initializeApp = require("./src/setups/init");
 const ErrorHandler = require("./src/middlewares/ErrorHandler");
+const helmet = require("helmet");
+
+// app.use(helmet());
 
 initializeApp(app);
 
