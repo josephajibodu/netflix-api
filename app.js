@@ -9,6 +9,12 @@ const helmet = require("helmet");
 
 // app.use(helmet());
 
+app.get('/', function (req, res) {
+    res.json({
+        message: "Netflix API 1.0"
+    })
+})
+
 initializeApp(app);
 
 registerMiddlewares(app);
