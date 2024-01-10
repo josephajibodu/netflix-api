@@ -7,7 +7,7 @@ const initializeApp = require("./src/setups/init");
 const ErrorHandler = require("./src/middlewares/ErrorHandler");
 const helmet = require("helmet");
 
-// app.use(helmet());
+app.use(helmet());
 
 app.get('/', function (req, res) {
     res.json({
